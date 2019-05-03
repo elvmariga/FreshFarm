@@ -1,0 +1,72 @@
+/*carousel CSS*/
+
+body{ 
+    padding-top: 3.5rem;
+    }
+.starter-template{
+    padding: 3rem 1.5rem;
+        text-align:center;
+}
+/*navbar*/
+.navbar-brand {
+    padding-left: 1%;
+    display: inline-block;
+    font-weight: bold;
+}
+.navbar-dark .navbar-brand {
+    color: #efb714;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #fff;
+}
+
+.navbar-dark .navbar-nav .nav-link :hover {
+    color: #f7b904;
+}
+
+.bg-dark {
+    color: #165d16;
+    background-color: #165d16!important;
+}
+.btn-secondary {
+    background-color: #165d16;
+    border-color: #165d16;
+}
+.btn-secondary :hover {
+    background-color: #165d16;
+    border-color: #165d16;
+}
+/*carousel caption*/
+
+.carousel-caption {
+padding-bottom: 80px;
+}
+
+.carousel-caption h5{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.carousel-caption p {
+    font-size: 20px;
+    color: darkcyan;
+}
+
+.main-container.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6{
+color: #efb714;
+}
+
+/*log in*/
+.log-in{
+    box-shadow: 4px;
+    box-decoration-break: clone;
+}
+/*modal*/
+.post1{
+    @include float-right;
+
+}
+.model-header{
+    background-color: #165d16;
+}
