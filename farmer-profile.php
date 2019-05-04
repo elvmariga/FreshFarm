@@ -121,6 +121,46 @@ if($_SESSION["ID"]!=null){
 }
 
 ?>
+
+
+<?php
+if($conn->query($sql)===TRUE){
+    $stmt = $conn->prepare("select product_name from product Where product_id=? ");
+    $stmt->bind_param("i",$_SESSION['ID']);
+    if($_SERVER["REQUEST_METHOD"]=="GET"){
+        $product_id = $_SESSION["ID"];
+    }else{
+        $product_id=$_POST["edit_id"];
+    }
+
+
+    if(!$stmt->execute()){
+        echo $stmt->error;
+    }
+    $stmt->bind_result($username);
+    $stmt->fetch();
+    $stmt->close();
+
+    $stmt = $conn->prepare(" select product_name, price, quantity,status, description, image_url from product where product_id=?" );
+    $stmt->bind_param("s", $product_id);
+    $stmt->execute();
+    $stmt->fetch();
+    $stmt->bind_result($product_name, $price, $quantity, $status, $description, $target_file);
+    $stmt->close();
+
+//    $stmt= $conn->prepare(" select file_path from product where product_id=? ");
+//    $stmt -> bind_param("i", $session['ID']);
+//    $stmt->execute();
+//    $stmt->bind_result($file_path);
+//    $stmt->fetch();
+//    $stmt->close();
+
+
+
+}else{
+    echo "connection error".$conn->error;
+}
+?>
 <body>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -335,8 +375,10 @@ if($_SESSION["ID"]!=null){
                     </div>
                         <div class="row al align-content-end">
                         <div class="col-9">
-                      
-                        </div>
+                             <form class="form-inline" action="editProduct.php" method="post" enctype="multipart/form-data">
+                            <input class="d-none" type="text" name="$product_id" value="'.$product_id.'" >
+                            <input type="submit" value="Edit Post" class="btn btn-outline-danger">
+                            </form>
                         <div class="col-2 pb-2">
                             <form class="form-inline" action="deletePost.php" method="post" enctype="multipart/form-data">
                             <input class="d-none" type="text" name="$product_id" value="'.$product_id.'" >
