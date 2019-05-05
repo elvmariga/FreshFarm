@@ -27,7 +27,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             // prepare and bind
             $stmt = $conn->prepare("SELECT * FROM buyer where email=?");
 
-//            $email = md5($email);
+            $user_id = md5($email);
             $stmt->bind_param("s", $email);
             $stmt->execute();
 

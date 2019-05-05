@@ -26,6 +26,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $stmt->bind_param("sssss",  $first_name,$last_name, $email, $pass_to_store, $user_id);
         if($stmt->execute()){
             $_SESSION['ID']=$user_id;
+            echo $_SESSION['ID'];
             header("Location: buyer-login.php");
         }else{
             echo $stmt->error;

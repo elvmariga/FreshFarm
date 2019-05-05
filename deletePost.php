@@ -1,7 +1,8 @@
 <?php
 session_start();
 
-if(true){
+if($_SESSION['ID']!=null){
+
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -15,11 +16,16 @@ if(true){
         die("Connection failed: " . $conn->connect_error);
     }
     $sql ="use FreshFarm";
-    if($conn->query($sql)===TRUE){
+    if($conn->query($sql)==TRUE){
 
         $stmt = $conn->prepare("DELETE FROM product WHERE product_id=?");
         $stmt->bind_param("s",$post_id);
-        $stmt->execute();
+        if($stmt->execute()){
+
+        }else{
+
+        }
+
         $stmt->close();
         header("Location:farmer-profile.php");
 

@@ -36,10 +36,10 @@
         }
         $sql =" use FreshFarm";
         if($conn->query($sql)===TRUE){
-            $stmt = $conn->prepare("select email from buyer Where user_id=? ");
+            $stmt = $conn->prepare("select * from buyer Where user_id=? ");
             $stmt->bind_param("s",$_SESSION['ID']);
             $stmt->execute();
-            $stmt->bind_result($email);
+            $stmt->bind_result($ID_no, $first_name,$last_name,$email, $buyer_password,$date, $user_id);
             $stmt->fetch();
             $stmt->close();
 //            if($email!=null && $_SERVER["REQUEST_METHOD"]=="POST"){
@@ -144,20 +144,21 @@ echo $_SESSION['ID'];
 //    $stmt->bind_result($username, $phone_no, $location, $target_file, $owner_id);
 //    $stmt->fetch();
 //    ?>
+<!--    --><?php
+//    $stmt = $conn->prepare("select first_name, last_name, email from buyer where user_id=?");
+//    $stmt->bind_param("s", $_SESSION['ID']);
+//    $stmt->execute();
+//    $stmt->bind_result($first_name,$last_name,$email);
+//    $stmt->fetch();
+//
+//echo $_SESSION['ID'];
+//    ?>
     <?php
-    $stmt = $conn->prepare("select first_name, last_name, email from buyer where user_id=?");
-    $stmt->bind_param("s", $_SESSION['ID']);
-    $stmt->execute();
-    $stmt->bind_result($first_name,$last_name,$email);
-    $stmt->fetch();
-
-echo $_SESSION['ID'];
-
     $stmt = $conn->prepare("select * from buyer_profile where owner_id=?");
     $X=1;
-    $stmt->bind_param("s", $owner_id );
-    $user_id= $owner_id;
+    $stmt->bind_param("s",  $_SESSION['ID']);
     $stmt->execute();
+
     $stmt->bind_result($username,$phone_no, $location, $target_file, $profile_id, $owner_id);
     $stmt->fetch();
 
@@ -219,7 +220,11 @@ echo $_SESSION['ID'];
 
                 </div>
                 <div class="row justify-content-center col-4">
-                    <a class="btn btn-info" href="buyer-profile.php">Edit Profile</a>
+<!--                    <a class="btn btn-info" href="buyer-profile.php">Edit Profile</a>-->
+                    <form class="form-inline" action="buyer-profile.php" method="post" enctype="multipart/form-data">
+                        <input class="d-none" type="text" name="product_id" value="' .profile_id.'" >
+                        <input type="submit" value="Remove" class="btn btn-info">
+                    </form>
                 </div>
             </div>
 

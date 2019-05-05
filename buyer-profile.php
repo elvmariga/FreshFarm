@@ -35,25 +35,24 @@
             die("Connection failed: " . $conn->connect_error);
         }
         $sql ="use FreshFarm";
+
         if($conn->query($sql)===TRUE){
+
             $stmt = $conn->prepare("select email from buyer Where user_id=? ");
             $stmt->bind_param("s",$_SESSION['ID']);
-
-            if(!$stmt->execute()){
-                echo $stmt->error;
-            }
-            $stmt->bind_result($username);
+            $stmt->bind_result($email);
             $stmt->fetch();
             $stmt->close();
-            if($username!=null && $_SERVER["REQUEST_METHOD"]=="POST"){
-                $username = $_POST["username"];
+
+            if($email==null && $_SERVER["REQUEST_METHOD"]=="POST"){
+                $username= $_POST["username"];
                 $phone_no=$_POST['phone_no'];
                 $location=$_POST['location'];
+                echo $_SESSION['ID'];
 
-
-
+                $img_url = "ddd";
                 $target_dir = "uploads/";
-                $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+                $target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
                 $uploadOk = 1;
                 $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
 // Check if image file is a actual image or fake image
@@ -73,7 +72,7 @@
                     $uploadOk = 0;
                 }
 // Check file size
-                if ($_FILES["fileToUpload"]["size"] > 500000) {
+                if ($_FILES["fileToUpload"]["size"] > 1000000) {
                     echo "Sorry, your file is too large.";
                     $uploadOk = 0;
                 }
@@ -86,8 +85,10 @@
 // Check if $uploadOk is set to 0 by an error
                 if ($uploadOk == 0) {
                     echo "Sorry, your file was not uploaded.";
+
 // if everything is ok, try to upload file
                 } else {
+
                     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
                         $stmt = $conn->prepare("insert into buyer_profile (username, phone_no, location, image_url,profile_id,owner_id) values (?,?,?,?,?,?)");
                         $owner_id= $user_id;
@@ -100,12 +101,14 @@
                         }else{
                             echo $stmt->error;
                         }
+                        echo $_SESSION['ID'];
                     } else {
                         echo "Sorry, there was an error uploading your file.";
                     }
                 }
+
                 }else{
-                echo $_SESSION['ID'];
+
                  echo "error in editting";
 
             }
@@ -190,22 +193,15 @@
 
 
                                     <div class="form-group">
-                                            <label for="input username"><b>Username</b>
-                                            </label>
-                                            <input type="text" class="form-control" id="Username" name="username" placeholder="Enter Username " required>
+                                        <label for="input username"><b>Username</b></label>
+                                        <input type="text" class="form-control" id="Username" name="username" placeholder="Enter Username " required>
 
                                     </div>
 
 
-                                    <!--                <div class="from-group ">-->
-                                    <!--                    <label for="input username"><b>ID no.</b>-->
-                                    <!--                    </label>-->
-                                    <!--                    <input type="text" class="form-control" id="name" name="ID_no" placeholder="Enter ID no. " required>-->
-                                    <!--                </div>-->
-
                                     <div class="form-group">
                                         <label for="input username"><b>Phone No.</b></label>
-                                        <input type="text" class="form-control" id="phone_no" name="phone_no" placeholder="Enter Phone No. " required>
+                                        <input type="number" class="form-control" id="phone_no" name="phone_no" placeholder="Enter Phone No. " required>
                                     </div>
                                     <div class="form-group">
                                         <label for="input username"><b>Location</b></label>

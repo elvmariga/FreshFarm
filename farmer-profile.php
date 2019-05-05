@@ -36,7 +36,7 @@ if($_SESSION["ID"]!=null){
     }
     $sql =" use FreshFarm";
     if($conn->query($sql)===TRUE){
-        $stmt = $conn->prepare("select email from farmer Where $user_id=? ");
+        $stmt = $conn->prepare("select email from farmer Where ID_no=? ");
         $stmt->bind_param("s",$_SESSION['ID']);
         $stmt->execute();
         $stmt->bind_result($email);
@@ -125,27 +125,28 @@ if($_SESSION["ID"]!=null){
 
 <?php
 if($conn->query($sql)===TRUE){
-    $stmt = $conn->prepare("select product_name from farmer Where user_id=? ");
-    $stmt->bind_param("i",$_SESSION['ID']);
-    if($_SERVER["REQUEST_METHOD"]=="GET"){
-        $user_id = $_SESSION["ID"];
-    }
+//    $stmt = $conn->prepare("select product_name from product Where product_id=? ");
+//    $stmt->bind_param("i",$_SESSION['ID']);
+//    if($_SERVER["REQUEST_METHOD"]=="GET"){
+//        $product_id = $_SESSION["ID"];
+//    }
+//
+//
+//    if(!$stmt->execute()){
+//        echo $stmt->error;
+//    }
+//    $stmt->bind_result($username);
+//    $stmt->fetch();
+//    $stmt->close();
 
-
-    if(!$stmt->execute()){
-        echo $stmt->error;
-    }
-    $stmt->bind_result($username);
-    $stmt->fetch();
-    $stmt->close();
-
-    $stmt = $conn->prepare(" select product_name, price, quantity,status, description, image_url from product where product_id=?" );
-    $stmt->bind_param("s", $product_id);
+    $stmt = $conn->prepare(" select product_id,product_name, price, quantity,status, description, image_url from product where owner_id=?" );
+    $stmt->bind_param("s", $_SESSION['ID']);
     $stmt->execute();
-    $stmt->fetch();
-    $stmt->bind_result($product_name, $price, $quantity, $status, $description, $target_file);
-    $stmt->close();
 
+    $stmt->bind_result($product_id, $product_name, $price, $quantity, $status, $description, $target_file);
+    $stmt->fetch();
+    $stmt->close();
+echo $_SESSION['ID'];
 //    $stmt= $conn->prepare(" select file_path from product where product_id=? ");
 //    $stmt -> bind_param("i", $session['ID']);
 //    $stmt->execute();
@@ -281,23 +282,12 @@ if($conn->query($sql)===TRUE){
             }
             ?>
 
-                <form class="col-sm-12 col-md-10 col-lg-9 col-xl-8 align-self-center" action="<?php echo $_SERVER["PHP_SELF"];?> " method="post" enctype="multipart/form-data">
-                    <div class="row align-items-center">
-
-                    </div>
-                    <div class="row justify-content-around">
-                        <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3">
-                            <div class="mt-5 col-12" ><h1  class="text-info text-center"><?php echo $first_name;?></h1></div>
-                        </div>
-
-
+                <div class="row justify-content-around">
+                    <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3">
+                        <div class="mt-5 col-12" ><h1  class="text-info text-center"><?php echo $first_name;?></h1></div>
                     </div>
 
-
-
-
-                </form>
-
+                </div>
 
             </div>
     </div>
@@ -376,7 +366,7 @@ if($conn->query($sql)===TRUE){
                                      </div>
                                 <div class=" col-2 pb-2">
                                    <form class="form-inline" action="deletePost.php" method="post" enctype="multipart/form-data">
-                                    <input class="d-none" type="text" name="product_id" value="' .$product_id .'" >
+                                    <input class="d-none" type="text" name="product_id" value="' .$product_id2 .'" >
                                     <input type="submit" value="Remove" class="btn btn-danger">
                                     </form>
                                 </div>

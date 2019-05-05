@@ -25,14 +25,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
          if ($conn->query($sql) == TRUE) {
 
   // prepare and bind
-              $stmt = $conn->prepare("SELECT * FROM farmer where user_id=?");
-              $user_id = md5($email);
-              $stmt->bind_param("s", $_SESSION['ID']);
+              $stmt = $conn->prepare("SELECT * FROM farmer where email=?");
+//              $user_id = md5($email);
+              $stmt->bind_param("s", $email);
               $stmt->execute();
-
               $stmt->bind_result($ID_no, $first_name,$last_name, $email, $pass_to_store,  $phone_no, $location, $date, $user_id);
+             $stmt->fetch();
 
-              $stmt->fetch();
+
 
 
 
@@ -49,7 +49,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 //
 //              }
 
-             if($email!=null){
+             if($ID_no ==null){
                  echo '<div class="alert alert-danger alert-dismissible fade show w-100">Wrong username
                         
                           <button class="close" role="button" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span></button>
@@ -57,7 +57,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
              }
              else{
                  if(password_verify($farmer_password,$pass_to_store)){
-                     $_SESSION['ID']=$user_id;
+                     $_SESSION['ID']=$ID_no;
                      echo "Login Successful";
                      header("Location: farmer-profile.php");
 
