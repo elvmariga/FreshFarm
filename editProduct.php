@@ -36,34 +36,54 @@ if($_SESSION["ID"]!=null){
     }
     $sql ="use FreshFarm";
     if($conn->query($sql)===TRUE){
-        $stmt = $conn->prepare("select product_name from product Where product_id=? ");
+        $stmt = $conn->prepare("select email from farmer Where user_id=? ");
         $stmt->bind_param("s",$_SESSION['ID']);
-        if($_SERVER["REQUEST_METHOD"]=="GET"){
-            $product_id = $_SESSION["ID"];
-        }
+        if($_SERVER["REQUEST_METHOD"]=="POST"){
 
-        if(!$stmt->execute()){
-            echo $stmt->error;
-        }
-        $stmt->bind_result($username);
-        $stmt->fetch();
-        $stmt->close();
+            $ID_no = $_SESSION["ID"];
+            if (isset($_POST['edit'])) {
 
-        $stmt = $conn->prepare(" select  product_name, price, quantity, status, description, image_url from  product where owner_id=?");
-        $stmt->bind_param("i", $owner_id );
-        $stmt->execute();
-        $stmt->fetch();
-        $stmt->bind_result($product_name,$price,$quantity, $status, $description, $target_file);
-        $stmt->close();
+                $product_name = $_POST["product"];
+                $price = $_POST["price"];
+                $quantity= $_POST["quantity"];
+                $status = $_POST["status"];
+                $description= $_POST["description"];
 
-        $stmt = $conn->prepare("select image_url from product Where product_id=? ");
-        $stmt->bind_param("i",$_SESSION['ID']);
-        $stmt->execute();
-        $stmt->bind_result($target_file);
-        if($stmt->fetch()) {
-            $stmt->close();
+                $img_url = "ddd";
+                $target_dir = "uploads/";
+                $target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
+                $uploadOk = 1;
+                $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+
+
+                $stmt= $conn->prepare("UPDATE product SET product_name = $product_name, price = $price, quantity= $quantity,status=$status, desccription=$description, image_url= $target_file WHERE product_id = $product_id");
+                $stmt->bind_param("i", $product_id);
+                $stmt->execute();
+                $stmt->fetch();
+                $stmt->bind_result($product_name, $price, $quantity, $status, $description, $target_file);
+                $stmt-> close();
+
+
+
+                header( 'Location: index.php' ) ;
+
+
+
+                $stmt->bind_result($username);
+                $stmt->fetch();
+                $stmt->close();
+
+                $stmt = $conn->prepare(" select  product_name, price, quantity, status, description, image_url from  product where product_id=?");
+                $stmt->bind_param("i", $product_id );
+                $stmt->execute();
+                $stmt->fetch();
+                $stmt->bind_result($product_name,$price,$quantity, $status, $description, $target_file);
+                $stmt->close();
+
+
+                }
             echo "edit product successful";
-//        header("Location:farmer-profile.php");
+            header("Location:farmer-profile.php");
         }
 
     }else{
@@ -88,8 +108,8 @@ if($_SESSION["ID"]!=null){
         <div class="col-sm-6 pt-2">
 
                     <p class="pt-2"> <b>Please enter the details of the product</b></p>
-                    <form class="form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="GET" enctype="multipart/form-data" role="form">
-                        <img class="img-fluid" src="img/images%20(3).jpg" height="200px">
+                    <form class="form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST" enctype="multipart/form-data" role="form">
+                        <img class="img-fluid" src="<?php echo $image_url; ?>" height="200px">
                         <hr>
                         <div class="custom-file mt-1">
                             <input type="file" class="custom-file-input"  id="customFile" name="fileToUpload" required>
@@ -128,7 +148,7 @@ if($_SESSION["ID"]!=null){
                                     <span class="label label-Description pb-3"><b>Description</b></span>
                                     <textarea class="form-control align-self-center" value="<?php echo $description;?>" required name="description"></textarea>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <a class="btn btn-danger" href="farmer-profile.php">Close</a>
                                         <input type="submit" value="submit" class="btn btn-primary">
                                     </div>
                                 </div>

@@ -22,10 +22,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $sql ="use FreshFarm";
     if($conn->query($sql)===TRUE){
 // prepare and bind
-        $stmt = $conn->prepare("INSERT INTO farmer ( ID_no, first_name, last_name, email,  farmer_password, phone_no,location) VALUES (?, ?, ?, ?, ?, ?,?)");
+        $stmt = $conn->prepare("INSERT INTO farmer ( ID_no, first_name, last_name, email,  farmer_password, phone_no,location, user_id) VALUES (?, ?, ?, ?, ?, ?,?,?)");
         $pass_to_store = password_hash($password_one,PASSWORD_DEFAULT);
-//        $email = md5($email);
-        $stmt->bind_param("issssis", $ID_no, $first_name,$last_name, $email, $pass_to_store,  $phone_no, $location);
+        $user_id = md5($email);
+        $stmt->bind_param("issssiss", $ID_no, $first_name,$last_name, $email, $pass_to_store,  $phone_no, $location, $user_id);
         if($stmt->execute()){
             header("Location: farmer-login.php");
         }else{

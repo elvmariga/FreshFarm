@@ -20,12 +20,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $sql ="use FreshFarm";
     if($conn->query($sql)===TRUE){
 // prepare and bind
-        $stmt = $conn->prepare("INSERT INTO buyer (first_name, last_name, email, buyer_password) VALUES (?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO buyer (first_name, last_name, email, buyer_password,user_id) VALUES (?, ?, ?,?, ?)");
         $pass_to_store = password_hash($password_one,PASSWORD_DEFAULT);
-//        $email = md5($email);
-        $stmt->bind_param("ssss",  $first_name,$last_name, $email, $pass_to_store);
+        $user_id = md5($ID_no);
+        $stmt->bind_param("sssss",  $first_name,$last_name, $email, $pass_to_store, $user_id);
         if($stmt->execute()){
-            header("Location: buyer-profile.php");
+            $_SESSION['ID']=$user_id;
+            header("Location: buyer-login.php");
         }else{
             echo $stmt->error;
         }

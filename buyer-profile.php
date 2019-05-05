@@ -20,9 +20,9 @@
 
         <link href="carousel.css" rel="stylesheet" type="text/css">
     </head>
-    <body>
-        <?php
-    if($_SESSION["ID"]!=null){
+    <?php
+
+    if($_SESSION['ID']!=null){
         $servername = "localhost";
         $username = "root";
         $password = "";
@@ -36,8 +36,9 @@
         }
         $sql ="use FreshFarm";
         if($conn->query($sql)===TRUE){
-            $stmt = $conn->prepare("select email from buyer Where ID_no=? ");
+            $stmt = $conn->prepare("select email from buyer Where user_id=? ");
             $stmt->bind_param("s",$_SESSION['ID']);
+
             if(!$stmt->execute()){
                 echo $stmt->error;
             }
@@ -89,10 +90,11 @@
                 } else {
                     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
                         $stmt = $conn->prepare("insert into buyer_profile (username, phone_no, location, image_url,profile_id,owner_id) values (?,?,?,?,?,?)");
+                        $owner_id= $user_id;
                         $stmt->bind_param("sissii",$username,$phone_no, $location,$target_file,$_SESSION["ID"], $owner_id);
                         echo $stmt->error;
                         if($stmt->execute()){
-                            header("Location:buyer-login.php");
+                            header("Location:shop.php");
 
 
                         }else{
@@ -102,9 +104,9 @@
                         echo "Sorry, there was an error uploading your file.";
                     }
                 }
-            }else{
-
-
+                }else{
+                echo $_SESSION['ID'];
+                 echo "error in editting";
 
             }
 
@@ -127,6 +129,8 @@
 
 
     ?>
+    <body>
+
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 
 

@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-if($_SESSION["ID"]!=null){
+if(true){
     $servername = "localhost";
     $username = "root";
     $password = "";
     $dbname = "FreshFarm";
-    $post_id = $_POST["post_id"];
+    $post_id = $_POST["product_id"];
 //Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -20,6 +20,7 @@ if($_SESSION["ID"]!=null){
         $stmt = $conn->prepare("DELETE FROM product WHERE product_id=?");
         $stmt->bind_param("s",$post_id);
         $stmt->execute();
+        $stmt->close();
         header("Location:farmer-profile.php");
 
     }

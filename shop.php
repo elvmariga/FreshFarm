@@ -36,7 +36,7 @@
         }
         $sql =" use FreshFarm";
         if($conn->query($sql)===TRUE){
-            $stmt = $conn->prepare("select email from buyer Where ID_no=? ");
+            $stmt = $conn->prepare("select email from buyer Where user_id=? ");
             $stmt->bind_param("s",$_SESSION['ID']);
             $stmt->execute();
             $stmt->bind_result($email);
@@ -105,7 +105,7 @@
 //
 //            }elseif ($email!=null){
 
-
+echo $_SESSION['ID'];
 //            }else{
 //                header("Location:buyer-login.php");
 //
@@ -144,6 +144,27 @@
 //    $stmt->bind_result($username, $phone_no, $location, $target_file, $owner_id);
 //    $stmt->fetch();
 //    ?>
+    <?php
+    $stmt = $conn->prepare("select first_name, last_name, email from buyer where user_id=?");
+    $stmt->bind_param("s", $_SESSION['ID']);
+    $stmt->execute();
+    $stmt->bind_result($first_name,$last_name,$email);
+    $stmt->fetch();
+
+echo $_SESSION['ID'];
+
+    $stmt = $conn->prepare("select * from buyer_profile where owner_id=?");
+    $X=1;
+    $stmt->bind_param("s", $owner_id );
+    $user_id= $owner_id;
+    $stmt->execute();
+    $stmt->bind_result($username,$phone_no, $location, $target_file, $profile_id, $owner_id);
+    $stmt->fetch();
+
+    $stmt-> close();
+echo $_SESSION['ID'];
+
+    ?>
 
     <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -184,18 +205,26 @@
 
 
                 </div>
-                <div class="mt-5 col-12" ><h5  class="text-info text-center"><?php echo $username;?></h5></div>
+                <div class="mt-5 col-12" ><h5  class="text-info text-center"><?php echo $first_name, $last_name;?></h5></div>
+
                 <hr>
-                <div class="row text-center">
+                <div class=" container text-center">
+
+                    <p><b>Email</b> <?php echo $email;?> </p>
+                        <hr>
+                    <p><b>Phone Number:</b> <?php echo $phone_no;?> </p>
+                    <hr>
+                    <p><b>Location</b> <?php echo $location;?> </p>
+
 
                 </div>
                 <div class="row justify-content-center col-4">
-                    <a class="button" href="buyer-profile.php">Edit Profile</a>
+                    <a class="btn btn-info" href="buyer-profile.php">Edit Profile</a>
                 </div>
             </div>
 
-            <div class="col-7 p-2 pt-3">
-                <div class="row justify-content-between m-5 p-2">
+            <div class="col-7 p-2 pt-3 shadow-lg">
+                <div class="row justify-content-between m-5 p-2 ">
                     <h5>Shop Organic Fruits, Melons,kalimoni Seasonal Baskets, Berries & Mangoes, Citrus Fruits, Azuri Dried Fruit,carrots, Butternut, Potatoes, Kale (Sukuma Wiki), Matoke, Potatoes, Tomatoes, Mushrooms, Peas, Onion, Managu, Spinanch</h5>
                 </div>
                 <div class="container">

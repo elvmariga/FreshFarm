@@ -36,7 +36,7 @@ if($_SESSION["ID"]!=null){
     }
     $sql =" use FreshFarm";
     if($conn->query($sql)===TRUE){
-        $stmt = $conn->prepare("select email from farmer Where ID_no=? ");
+        $stmt = $conn->prepare("select email from farmer Where $user_id=? ");
         $stmt->bind_param("s",$_SESSION['ID']);
         $stmt->execute();
         $stmt->bind_result($email);
@@ -125,12 +125,10 @@ if($_SESSION["ID"]!=null){
 
 <?php
 if($conn->query($sql)===TRUE){
-    $stmt = $conn->prepare("select product_name from product Where product_id=? ");
+    $stmt = $conn->prepare("select product_name from farmer Where user_id=? ");
     $stmt->bind_param("i",$_SESSION['ID']);
     if($_SERVER["REQUEST_METHOD"]=="GET"){
-        $product_id = $_SESSION["ID"];
-    }else{
-        $product_id=$_POST["edit_id"];
+        $user_id = $_SESSION["ID"];
     }
 
 
@@ -314,7 +312,7 @@ if($conn->query($sql)===TRUE){
             <?php
             $stmt = $conn->prepare("select* from product");
             if($stmt->execute()){
-                $stmt->bind_result($product_id,$product_name,$price,$quantity,$status, $description,$image_url,$date, $owner_id);
+                $stmt->bind_result($product_id2,$product_name,$price,$quantity,$status, $description,$image_url,$date, $owner_id);
                 while ($stmt->fetch()){
 
                     $p= strpos($description,"<div>");
@@ -374,24 +372,16 @@ if($conn->query($sql)===TRUE){
                           <hr>
                     </div>
                         <div class="row al align-content-end">
-                        <div class="col-9">
-                             <form class="form-inline" action="editProduct.php" method="post" enctype="multipart/form-data">
-                            <input class="d-none" type="text" name="$product_id" value="'.$product_id.'" >
-                            <input type="submit" value="Edit Post" class="btn btn-outline-danger">
-                            </form>
-                        <div class="col-2 pb-2">
-                            <form class="form-inline" action="deletePost.php" method="post" enctype="multipart/form-data">
-                            <input class="d-none" type="text" name="$product_id" value="'.$product_id.'" >
-                            <input type="submit" value="Remove" class="btn btn-outline-danger">
-                            </form>
-                        </div>
-
-
-                    </div>
-
-
-
-                </div>
+                            <div class="col-9">
+                                     </div>
+                                <div class=" col-2 pb-2">
+                                   <form class="form-inline" action="deletePost.php" method="post" enctype="multipart/form-data">
+                                    <input class="d-none" type="text" name="product_id" value="' .$product_id .'" >
+                                    <input type="submit" value="Remove" class="btn btn-danger">
+                                    </form>
+                                </div>
+                             
+                            </div>
 
 
 

@@ -26,14 +26,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // prepare and bind
             $stmt = $conn->prepare("SELECT * FROM buyer where email=?");
+
 //            $email = md5($email);
             $stmt->bind_param("s", $email);
             $stmt->execute();
 
-            $stmt->bind_result($ID_no, $first_name,$last_name, $email, $pass_to_store,  $date);
+
+            $stmt->bind_result($ID_no, $first_name,$last_name, $email, $pass_to_store,  $date, $user_id);
 
             $stmt->fetch();
-            echo $ID_no;
 
 
 
@@ -49,25 +50,25 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 //
 //              }
 
-            if($email==null){
+            if($email ==null){
                 echo '<div class="alert alert-danger alert-dismissible fade show w-100">Wrong Email address
                        <button class="close" role="button" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span></button>
                       </div>';
             }
-            else{
-                if(password_verify($buyer_password,$pass_to_store)){
-                    $_SESSION['ID']=$ID_no;
+            else {
+                if (password_verify($buyer_password, $pass_to_store)){
+                        $_SESSION['ID'] = $ID_no;
+                        echo "Login Successfull!";
+                        header("Location: shop.php");
 
-                    header("Location: shop.php");
-                    echo "Login Succeful!";
                 }else{
 
                     echo '<div class="alert alert-danger alert-dismissible fade show w-100">Wrong Password
                        <button class="close" role="button" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span></button>
                       </div>';
                 }
-
             }
+
             // set parameters and execute
             $stmt->close();
             $conn->close();
