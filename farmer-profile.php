@@ -300,7 +300,8 @@ echo $_SESSION['ID'];
         <div class="container">
 
             <?php
-            $stmt = $conn->prepare("select* from product");
+            $stmt = $conn->prepare("select * from product where owner_id=?");
+            $stmt->bind_param("i",$_SESSION['ID']);
             if($stmt->execute()){
                 $stmt->bind_result($product_id2,$product_name,$price,$quantity,$status, $description,$image_url,$date, $owner_id);
                 while ($stmt->fetch()){

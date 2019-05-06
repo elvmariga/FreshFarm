@@ -38,7 +38,7 @@
 
         if($conn->query($sql)===TRUE){
 
-            $stmt = $conn->prepare("select email from buyer Where user_id=? ");
+            $stmt = $conn->prepare("select email from buyer Where ID_no=? ");
             $stmt->bind_param("s",$_SESSION['ID']);
             $stmt->bind_result($email);
             $stmt->fetch();

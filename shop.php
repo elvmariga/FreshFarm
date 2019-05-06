@@ -42,117 +42,84 @@
             $stmt->bind_result($ID_no, $first_name,$last_name,$email, $buyer_password,$date, $user_id);
             $stmt->fetch();
             $stmt->close();
-//            if($email!=null && $_SERVER["REQUEST_METHOD"]=="POST"){
-//                $product_name = $_POST["product"];
-//                $price = $_POST["price"];
-//                $quantity= $_POST["quantity"];
-//                $status = $_POST["status"];
-//                $description= $_POST["description"];
-//
-//                $img_url = "ddd";
-//                $target_dir = "uploads/";
-//                $target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
-//                $uploadOk = 1;
-//                $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
-//// Check if image file is a actual image or fake image
-//                if(isset($_POST["submit"])) {
-//                    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-//                    if($check !== false) {
-//                        echo "File is an image - " . $check["mime"] . ".";
-//                        $uploadOk = 1;
-//                    } else {
-//                        echo "File is not an image.";
-//                        $uploadOk = 0;
-//                    }
-//                }
-//// Check if file already exists
-//                if (file_exists($target_file)) {
-//                    echo "Sorry, file already exists.";
-//                    $uploadOk = 0;
-//                }
-//// Check file size
-//                if ($_FILES["fileToUpload"]["size"] > 1000000) {
-//                    echo "Sorry, your file is too large.";
-//                    $uploadOk = 0;
-//                }
-//// Allow certain file formats
-//                if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-//                    && $imageFileType != "gif" ) {
-//                    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-//                    $uploadOk = 0;
-//                }
-//// Check if $uploadOk is set to 0 by an error
-//                if ($uploadOk == 0) {
-//                    echo "Sorry, your file was not uploaded.";
-//// if everything is ok, try to upload file
-//                } else {
-//                    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-//                        $stmt = $conn->prepare("insert into product (product_name, price, quantity, status, image_url, description, owner_id) values (?,?,?,?,?,?,?)");
-//                        $stmt->bind_param("ssissss",$product_name, $price, $quantity, $status,$target_file, $description, $_SESSION["ID"]);
-//                        if($stmt->execute()){
-//                            echo "Product posted";
-//                            header("Location:farmer-profile.php");
-//
-//
-//                        }else{
-//                            echo $stmt->error;
-//                        }
-//                    } else {
-//                        echo "Sorry, there was an error uploading your file.";
-//                    }
-//                }
-//
-//
-//            }elseif ($email!=null){
+
 
 echo $_SESSION['ID'];
-//            }else{
-//                header("Location:buyer-login.php");
-//
-//            }
+        }elseif($email==null && $_SERVER["REQUEST_METHOD"]=="POST"){
+                $username= $_POST["username"];
+                $phone_no=$_POST['phone_no'];
+                $location=$_POST['location'];
+                echo $_SESSION['ID'];
 
-        }else{
-            echo "connection error".$conn->error;
-        }
+                $img_url = "ddd";
+                $target_dir = "uploads/";
+                $target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
+                $uploadOk = 1;
+                $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+// Check if image file is a actual image or fake image
+                if(isset($_POST["submit"])) {
+                    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+                    if($check !== false) {
+                        echo "File is an image - " . $check["mime"] . ".";
+                        $uploadOk = 1;
+                    } else {
+                        echo "File is not an image.";
+                        $uploadOk = 0;
+                    }
+                }
+// Check if file already exists
+                if (file_exists($target_file)) {
+                    echo "Sorry, file already exists.";
+                    $uploadOk = 0;
+                }
+// Check file size
+                if ($_FILES["fileToUpload"]["size"] > 1000000) {
+                    echo "Sorry, your file is too large.";
+                    $uploadOk = 0;
+                }
+// Allow certain file formats
+                if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+                    && $imageFileType != "gif" ) {
+                    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+                    $uploadOk = 0;
+                }
+// Check if $uploadOk is set to 0 by an error
+                if ($uploadOk == 0) {
+                    echo "Sorry, your file was not uploaded.";
 
-    }else{
+// if everything is ok, try to upload file
+                } else {
 
-        header("Location:buyer-login.php");
+                    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+                        $stmt = $conn->prepare("insert into buyer_profile (username, phone_no, location, image_url,profile_id,owner_id) values (?,?,?,?,?,?)");
+                        $owner_id= $user_id;
+                        $stmt->bind_param("sissii",$username,$phone_no, $location,$target_file,$_SESSION["ID"], $owner_id);
+                        echo $stmt->error;
+                        if($stmt->execute()){
+                            header("Location:shop.php");
+
+
+                        }else{
+                            echo $stmt->error;
+                        }
+                        echo $_SESSION['ID'];
+                    } else {
+                        echo "Sorry, there was an error uploading your file.";
+                    }
+                }
+
+                }else{
+
+                 echo "error in editting";
+            }
+        }else {
+        echo "connection error" . $conn->error;
     }
 
     ?>
-<!--    --><?php
-//    $stmt = $conn->prepare("select username from buyer_profile Where owner_id=? ");
-//    $stmt->bind_param("s",$_SESSION['ID']);
-//    if($_SERVER["REQUEST_METHOD"]=="GET"){
-//    $ID_no= $_SESSION["ID"];
-//    }else{
-//    echo $stmt->error;
-//    }
-//
-//
-//    if(!$stmt->execute()){
-//    echo $stmt->error;
-//    }
-//    $stmt->bind_result($username);
-//    $stmt->fetch();
-//    $stmt->close();
-//
-//    $stmt = $conn->prepare(" select  username, phone_no, location, image_url, owner_id from  buyer-profile where profile_id=?");
-//    $stmt->bind_param("i",$owner_id);
-//    $stmt->execute();
-//    $stmt->bind_result($username, $phone_no, $location, $target_file, $owner_id);
-//    $stmt->fetch();
-//    ?>
-<!--    --><?php
-//    $stmt = $conn->prepare("select first_name, last_name, email from buyer where user_id=?");
-//    $stmt->bind_param("s", $_SESSION['ID']);
-//    $stmt->execute();
-//    $stmt->bind_result($first_name,$last_name,$email);
-//    $stmt->fetch();
-//
-//echo $_SESSION['ID'];
-//    ?>
+
+
+
     <?php
     $stmt = $conn->prepare("select * from buyer_profile where owner_id=?");
     $X=1;
@@ -220,11 +187,65 @@ echo $_SESSION['ID'];
 
                 </div>
                 <div class="row justify-content-center col-4">
-<!--                    <a class="btn btn-info" href="buyer-profile.php">Edit Profile</a>-->
-                    <form class="form-inline" action="buyer-profile.php" method="post" enctype="multipart/form-data">
-                        <input class="d-none" type="text" name="product_id" value="' .profile_id.'" >
-                        <input type="submit" value="Remove" class="btn btn-info">
-                    </form>
+<!--                    modal edit profile-->
+                    <button  role="button" class="btn btn-success mr-5" data-target="#exampleModal" data-toggle="modal">Edit Profile</button>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content p-5">
+                                <div class="modal-header all-color-successful" id="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Post Products to the MarketPlace</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+
+                                </div>
+                                <p> <b>Please enter the details of the product</b></p>
+                                <form class="col-sm-12 col-md-10 col-lg-9 col-xl-8 align-self-center" action="<?php echo $_SERVER["PHP_SELF"];?> " method="post" enctype="multipart/form-data">
+                                    <div class="row align-items-center">
+                                        <div class="custom-file mt-1  col-4 offset-4 ">
+                                            <input type="file" class="custom-file-input" id="customFile" name="fileToUpload" required>
+                                            <label class="custom-file-label" for="customFile">Choose a profile image to upload</label>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-around">
+                                        <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3 pt-3">
+
+
+
+                                            <div class="form-group">
+                                                <label for="input username"><b>Username</b></label>
+                                                <input type="text" class="form-control" id="Username" name="username" placeholder="Enter Username " required>
+
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label for="input username"><b>Phone No.</b></label>
+                                                <input type="number" class="form-control" id="phone_no" name="phone_no" placeholder="Enter Phone No. " required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="input username"><b>Location</b></label>
+                                                <input type="text" class="form-control" id="location" name="location" placeholder="Enter location " required>
+                                            </div>
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+                            </div>
+
+
+                            <div class="row mt-5 mb-5 justify-content-center">
+                                <input type="submit" name="submit_profile" value="save" class="btn btn-success">
+
+                            </div>
+
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -232,13 +253,16 @@ echo $_SESSION['ID'];
                 <div class="row justify-content-between m-5 p-2 ">
                     <h5>Shop Organic Fruits, Melons,kalimoni Seasonal Baskets, Berries & Mangoes, Citrus Fruits, Azuri Dried Fruit,carrots, Butternut, Potatoes, Kale (Sukuma Wiki), Matoke, Potatoes, Tomatoes, Mushrooms, Peas, Onion, Managu, Spinanch</h5>
                 </div>
-                <div class="container">
+                <hr>
+
+                <div class="container m-2 p-2">
 
                     <?php
-                    $stmt = $conn->prepare("select* from product");
-                    if($stmt->execute()){
-                        $stmt->bind_result($product_id,$product_name,$price,$quantity,$status, $description,$image_url,$date, $owner_id);
-                        while ($stmt->fetch()){
+                    if($_SESSION["ID"]!=null){
+                        $stmt = $conn->prepare("select* from product");
+                        if($stmt->execute()){
+                            $stmt->bind_result($product_id,$product_name,$price,$quantity,$status, $description,$image_url,$date, $owner_id);
+                            while ($stmt->fetch()){
 
                             $p= strpos($description,"<div>");
                             $shot;
@@ -394,7 +418,7 @@ echo $_SESSION['ID'];
                     }else{
                         echo $stmt->error;
                     }
-
+                    }
                     ?>
 
 
