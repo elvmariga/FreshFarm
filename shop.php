@@ -121,9 +121,9 @@ echo $_SESSION['ID'];
 
 
     <?php
-    $stmt = $conn->prepare("select * from buyer_profile where owner_id=?");
+    $stmt = $conn->prepare("select * from buyer_profile where profile_id=?");
     $X=1;
-    $stmt->bind_param("s",  $_SESSION['ID']);
+    $stmt->bind_param("s",  $X);
     $stmt->execute();
 
     $stmt->bind_result($username,$phone_no, $location, $target_file, $profile_id, $owner_id);
@@ -251,7 +251,9 @@ echo $_SESSION['ID'];
 
             <div class="col-7 p-2 pt-3 shadow-lg">
                 <div class="row justify-content-between m-5 p-2 ">
+                    <div class="col-12">
                     <h5>Shop Organic Fruits, Melons,kalimoni Seasonal Baskets, Berries & Mangoes, Citrus Fruits, Azuri Dried Fruit,carrots, Butternut, Potatoes, Kale (Sukuma Wiki), Matoke, Potatoes, Tomatoes, Mushrooms, Peas, Onion, Managu, Spinanch</h5>
+                    </div>
                 </div>
                 <hr>
 
@@ -260,6 +262,7 @@ echo $_SESSION['ID'];
                     <?php
                     if($_SESSION["ID"]!=null){
                         $stmt = $conn->prepare("select* from product");
+
                         if($stmt->execute()){
                             $stmt->bind_result($product_id,$product_name,$price,$quantity,$status, $description,$image_url,$date, $owner_id);
                             while ($stmt->fetch()){
@@ -285,10 +288,10 @@ echo $_SESSION['ID'];
                             echo '
             <div class="row  mt-3">
             <div class="col-12 bg-light mt-2 ">
-                <div class="row justify-content-between">
+                <div class="row justify-content-center col- 10">
                     <div class="col-4 pr-3 pl-0">
                         <img src="'.$image_url.'" class="card-img-top" height="180">
-    
+
                     </div>
                     <div class="col-8">
                         <div class="row justify-content-between pr-3 pt-2">
@@ -316,15 +319,18 @@ echo $_SESSION['ID'];
                             <strong> Description  </strong>
                         </div>
                         <div class="row">
-                            
+
                             '.$shot.'
                               <hr>
                         </div>
                             <div class="row al align-content-end">
                             <div class="col-9">
-                          
+                            <a  class ="btn btn-info" href="bookProduct.php?product_id='.$product_id.'">Book</a>
+                                   
                             </div>
-                            <div class="col-2 pb-2">
+                            <div class=" row col-2 pb-2">
+                           
+                                    
                                <button  role="button" class="btn btn-success mr-5" data-target="#id'.$product_id.'" data-toggle="modal">View</button>
         <div class="modal fade text-center col-10" id="id'.$product_id.'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -341,14 +347,14 @@ echo $_SESSION['ID'];
                             <div class="w-70">
                                   <div class=" tex-center col-6 pr-3 pl-5">
                         <img src="'.$image_url.'" class="card-img-top" height="180">
-                            
+
                     </div>
                     <hr>
                     <div class="col-12">
                         <div class="row justify-content-between pl-3 pr-1 pt-2 col-2">
                         <label for="price"><b>Product Name:</b></label>
                             <h5>'.$product_name.'</h5>
-                          
+
                         </div>
                         <hr>
                         <div class="row text-center p-3 col-12">
@@ -370,10 +376,10 @@ echo $_SESSION['ID'];
                             <strong> Description  </strong>
                         </div>
                         <div class="row">
-                            
+
                             '.$description.'
                               <hr>
-                                
+
                         </div>
                                     <small class="small text-muted pl-1">Posted On: '.$date.'</small>
 
@@ -383,30 +389,31 @@ echo $_SESSION['ID'];
 
                         </div>
                         <div class="modal-footer">
+                                    
                             <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-                      
+
                         </div>
                     </form>
                 </div>
             </div>
         </div>
                             </div>
-    
-    
+
+
                         </div>
-    
-    
-    
+
+
+
                     </div>
-    
-    
-    
+
+
+
                     </div>
                     </div>
-    
-    
+
+
                  </div>
-    
+
                 ';
 
 
@@ -420,6 +427,8 @@ echo $_SESSION['ID'];
                     }
                     }
                     ?>
+
+
 
 
 

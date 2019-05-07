@@ -194,7 +194,7 @@ echo $_SESSION['ID'];
     <div class="col-sm-4 p-5 pt-3">
 
 
-            <!--modal for post product-->
+            <!--modal for  product  posting-->
         <button  role="button" class="btn btn-success mr-5" data-target="#exampleModal" data-toggle="modal">Post Product</button>
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -265,18 +265,28 @@ echo $_SESSION['ID'];
                 </div>
         <div class="row mt-5 justify-content-center">
 
+<!--to display farmer's details on the the profile page-->
 
             <?php
-            $stmt = $conn->prepare(" select  ID_no, first_name, last_name, email,  phone_no, location from  farmer where ID_no=?");
-            $stmt->bind_param("i",$ID_no);
-            if ($stmt->execute()) {
-                $stmt->bind_result($ID_no, $first_name, $last_name, $email, $phone_no, $location);
-                while ($stmt->fetch()) {
+            if($_SESSION['ID']!=null){
+                $stmt = $conn->prepare(" select  ID_no, first_name, last_name, email,  phone_no, location from  farmer where user_id=?");
+                $stmt->bind_param("s",$_SESSION['ID']);
+                if ($stmt->execute())  {
+                    $stmt->bind_result($ID_no, $first_name, $last_name, $email, $phone_no, $location);
+                    $stmt->fetch();
 
-                    echo '
-            <p> Name: '.$first_name.'</p>
-            ';
-                }
+//                        echo $_SESSION['ID'];
+
+                        echo $first_name;
+
+//
+//                        echo '
+/*                         <div class="mt-5 col-12" ><h1  class="text-info text-center"> <?php echo $first_name, " ", $last_name;?></h1></div>*/
+//
+/*                <p Name: <?php echo "$first_name"; ?></p>*/
+//                ';
+
+                    }
             }else{
                 echo $stmt->error;
             }
@@ -284,7 +294,7 @@ echo $_SESSION['ID'];
 
                 <div class="row justify-content-around">
                     <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3">
-                        <div class="mt-5 col-12" ><h1  class="text-info text-center"><?php echo $first_name;?></h1></div>
+                        <div class="mt-5 col-12" ><h1  class="text-info text-center"><?php echo $first_name, " ", $last_name;?></h1></div>
                     </div>
 
                 </div>
@@ -292,11 +302,13 @@ echo $_SESSION['ID'];
             </div>
     </div>
     <div class="col-sm-6 p-5 pt-3 ">
-        <form class="form-inline my-5 my-lg- ml-5 ">
+        <div>
+            <form class="form-inline my-5 my-lg- ml-5 ">
             <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
             <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-        </form>
-
+            </form>
+        </div>
+<!-- Display posted products  on the  farmer's profile-->
         <div class="container">
 
             <?php
