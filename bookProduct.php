@@ -44,9 +44,9 @@ if($_SESSION["ID"]!=null) {
             echo '<div class="alert alert-danger alert-dismissible fade show w-100"> Product Book successfull.
                        <button class="close" role="button" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span></button>
                       </div>';
-            //header("location:shop.php");
-             $stmt->close();
 
+             $stmt->close();
+                header("location:farmer-profile.php");
      //   } else {
 
 

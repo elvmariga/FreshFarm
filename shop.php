@@ -9,7 +9,7 @@
         <meta name="Elvis Mariga" content="">
         <link rel="icon" href="img/icon.jpg">
 
-        <title>FreshFarm | Farmer Profile</title>
+        <title>FreshFarm | Shop</title>
 
         <!-- Bootstrap core CSS -->
         <link href="dist/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">

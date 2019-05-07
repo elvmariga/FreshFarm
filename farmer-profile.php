@@ -375,8 +375,9 @@ echo $_SESSION['ID'];
                           <hr>
                     </div>
                         <div class="row al align-content-end">
-                            <div class="col-9">
-                                     </div>
+                             <div class="col-9">
+                                 <a  class ="btn btn-info" href="viewBooked.php?prod_id='.$book_id.'">View Books</a>
+                              </div>
                                 <div class=" col-2 pb-2">
                                    <form class="form-inline" action="deletePost.php" method="post" enctype="multipart/form-data">
                                     <input class="d-none" type="text" name="product_id" value="' .$product_id2 .'" >
@@ -386,9 +387,9 @@ echo $_SESSION['ID'];
                              
                             </div>
 
+                        </div>
 
-
-                </div>
+                      </div>
                 </div>
 
 
@@ -423,6 +424,7 @@ echo $_SESSION['ID'];
 
     </div>
     <div class="col-sm-2 p-5 pt-3">
+
     </div>
     </div>
 
