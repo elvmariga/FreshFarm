@@ -146,13 +146,13 @@ if($conn->query($sql)===TRUE){
     $stmt->bind_result($product_id, $product_name, $price, $quantity, $status, $description, $target_file);
     $stmt->fetch();
     $stmt->close();
-echo $_SESSION['ID'];
-//    $stmt= $conn->prepare(" select file_path from product where product_id=? ");
-//    $stmt -> bind_param("i", $session['ID']);
-//    $stmt->execute();
-//    $stmt->bind_result($file_path);
-//    $stmt->fetch();
-//    $stmt->close();
+
+    $stmt= $conn->prepare(" select book_id from bookprduct where owner_id=? ");
+    $stmt -> bind_param("i", $session['ID']);
+    $stmt->execute();
+    $stmt->bind_result($book_id);
+    $stmt->fetch();
+    $stmt->close();
 
 
 
@@ -160,6 +160,7 @@ echo $_SESSION['ID'];
     echo "connection error".$conn->error;
 }
 ?>
+
 <body>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -208,7 +209,7 @@ echo $_SESSION['ID'];
                     </div>
                         <p> <b>Please enter the details of the product</b></p>
                         <form class="form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST" enctype="multipart/form-data" role="form">
-                            <img class="img-fluid" src="img/images%20(3).jpg" height="200px">
+                            <img class="img-fluid" src="'.$image_url.'" height="200px">
                             <hr>
                             <div class="custom-file mt-1">
                                 <input type="file" class="custom-file-input"  id="customFile" name="fileToUpload" required>
@@ -354,7 +355,7 @@ echo $_SESSION['ID'];
                     <div class="row text-center p-1">
                         <div class="col-sm-3">
                             <label for="price"><b>Price</b></label>
-                            <p>'.$price.'</p>
+                            <p> Kshs.'.$price.'</p>
                         </div>
                         <div class="col-sm-3">
                             <label for="quantity"><b>Quantity</b></label>
@@ -375,14 +376,82 @@ echo $_SESSION['ID'];
                           <hr>
                     </div>
                         <div class="row al align-content-end">
-                             <div class="col-9">
-                                 <a  class ="btn btn-info" href="viewBooked.php?prod_id='.$book_id.'">View Books</a>
+                             <div class="col-1">
+         
                               </div>
                                 <div class=" col-2 pb-2">
                                    <form class="form-inline" action="deletePost.php" method="post" enctype="multipart/form-data">
                                     <input class="d-none" type="text" name="product_id" value="' .$product_id2 .'" >
-                                    <input type="submit" value="Remove" class="btn btn-danger">
+                                    <input type="submit" value="Remove" class="btn btn-danger ml-5">
                                     </form>
+                                   <hr>
+                                  <a   class="btn btn-success ml-5" href="viewBooked.php" >View books</a>
+//        <div class="modal fade text-center col-10" id="id'.$book_id.'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+//            <div class="modal-dialog modal-lg" role="document">
+//                <div class="modal-content text-center">
+//                    <div class="modal-header ">
+//                        <h5 class="modal-title" id="exampleModalLabel">Product Details</h5>
+//                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+//                            <span aria-hidden="true">&times;</span>
+//                        </button>
+//
+//                    </div>
+//                    <form style="color:black"  enctype="multipart/form-data" method="post">
+//                        <div class="modal-body">
+//                            <div class="w-70">
+//                                  <div class=" tex-center col-6 pr-3 pl-5">
+//                        <img src="'.$image_url.'" class="card-img-top" height="180">
+//
+//                    </div>
+//                    <hr>
+//                    <div class="col-12">
+//                        <div class="row justify-content-between pl-3 pr-1 pt-2 col-2">
+//                        <label for="price"><b>Product Name:</b></label>
+//                            <h5>'.$product_name.'</h5>
+//
+//                        </div>
+//                        <hr>
+//                        <div class="row text-center p-3 col-12">
+//                            <div class="col-sm-3">
+//                                <label for="price"><b>Price</b></label>
+//                                <p>'.$price.'</p>
+//                            </div>
+//                            <div class="col-sm-3">
+//                                <label for="quantity"><b>Quantity</b></label>
+//                                <p>'.$quantity.'</p>
+//                            </div>
+//                            <div class="col-sm-3">
+//                                <label for="status"><b>Status</b></label>
+//                                <p>'.$status.'</p>
+//                            </div>
+//                        </div>
+//                        <hr>
+//                        <div class="row p-2 mt-0 col-3">
+//                            <strong> Description  </strong>
+//                        </div>
+//                        <div class="row">
+//
+//                            '.$description.'
+//                              <hr>
+//
+//                        </div>
+//                                    <small class="small text-muted pl-1">Posted On: '.$date.'</small>
+//
+//
+//                            </div>
+//
+//
+//                        </div>
+//                        <div class="modal-footer">
+//                                    
+//                            <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+//
+//                        </div>
+//                    </form>
+//                </div>
+//            </div>
+//        </div>
+                                
                                 </div>
                              
                             </div>

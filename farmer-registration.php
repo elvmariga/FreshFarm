@@ -101,44 +101,44 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <div class="row text-center pb-3">
                 <strong> <h1> Create a New Farmer Account</h1></strong>
                 <div class="col-sm-6   pt-3">
-                    <label for="input username"><b>Firstname</b>
+                    <label for="input first_name"><b>Firstname</b>
                     </label>
                     <input type="text" class="form-control" id="First_name" name="first_name" placeholder="Enter First_name " required>
                 </div>
                 <div class="col-sm-6  pt-3 ">
-                    <label for="input username"><b>Lastname</b>
+                    <label for="input last_name"><b>Lastname</b>
                     </label>
                     <input type="text" class="form-control" id="Last_name" name="last_name" placeholder="Enter Last_name " required>
                 </div>
 
             </div>
                 <div class="from-group ">
-                    <label for="input username"><b>ID no.</b>
+                    <label for="input ID no"><b>ID no.</b>
                     </label>
-                    <input type="text" class="form-control" id="name" name="ID_no" placeholder="Enter ID no. " required>
+                    <input type="number" maxlength="8" minlength="8" class="form-control" id="name" name="ID_no" placeholder="Enter ID no. " required>
                 </div>
                 <div class="form-group">
                     <label for="InputEmail"><b>Email address</b></label>
                     <input type="email" class="form-control" id="InputEmail" name="email" aria-describedby="emailHelp" placeholder="Enter email" required>
                 </div>
                 <div class="form-group">
-                    <label for="input username"><b>Phone No.</b></label>
-                    <input type="text" class="form-control" id="phone_no" name="phone_no" placeholder="Enter Phone No. " required>
+                    <label for="input phone_no"><b>Phone No.</b></label>
+                    <input type="text" minlength="8" class="form-control" id="phone_no" name="phone_no" placeholder="Enter Phone No. " required>
                 </div>
                 <div class="form-group">
-                    <label for="input username"><b>Location</b></label>
+                    <label for="input location"><b>Location</b></label>
                     <input type="text" class="form-control" id="location" name="location" placeholder="Enter location " required>
                 </div>
 
                 <div>
-                    <password-strength data-minimum-character-count="8" data-passphrase-length="15">
+
                         <dl class="form-group">
                             <dt class="input-label">
                                 <label class="form-label f5" for="farmer_password">Password</label>
                             </dt>
                             <dd>
-                                <input type="password" name="password_one" id="farmer_password" class="form-control form-control-lg input-block" placeholder="Create a password" required>
-                                <input type="password" name="password_two" id="farmer_password1" class="form-control form-control-lg input-block mt-5 mb-5" placeholder="Confirm password" required>
+                                <input type="password" name="password_one" data-minimum-character-count="8" data-passphrase-length="15" id="farmer_password" class="form-control form-control-lg input-block" placeholder="Create a password" required>
+                                <input type="password" name="password_two" data-minimum-character-count="8" data-passphrase-length="15" id="farmer_password1" class="form-control form-control-lg input-block mt-5 mb-5" placeholder="Confirm password" required>
                                 <p class="form-control-note">Make sure it's <span class="js-more-than-n-chars">more than 15 characters</span> OR <span class="js-min-chars">at least 8 characters</span> <span class="js-number-requirement">including a number</span> <span class="js-letter-requirement">and a lowercase letter</span>. <a href="password.html" class="tooltipped tooltipped-s" aria-label="Learn more about strong passwords">Learn more</a>.</p>
                             </dd>
                         </dl>

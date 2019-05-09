@@ -44,12 +44,12 @@
             $stmt->close();
 
 
-echo $_SESSION['ID'];
+
         }elseif($email==null && $_SERVER["REQUEST_METHOD"]=="POST"){
                 $username= $_POST["username"];
                 $phone_no=$_POST['phone_no'];
                 $location=$_POST['location'];
-                echo $_SESSION['ID'];
+
 
                 $img_url = "ddd";
                 $target_dir = "uploads/";
@@ -102,7 +102,7 @@ echo $_SESSION['ID'];
                         }else{
                             echo $stmt->error;
                         }
-                        echo $_SESSION['ID'];
+
                     } else {
                         echo "Sorry, there was an error uploading your file.";
                     }
@@ -122,7 +122,7 @@ echo $_SESSION['ID'];
 
     <?php
     $stmt = $conn->prepare("select * from buyer_profile where profile_id=?");
-    $X=1;
+    $X=3;
     $stmt->bind_param("s",  $X);
     $stmt->execute();
 
@@ -130,7 +130,7 @@ echo $_SESSION['ID'];
     $stmt->fetch();
 
     $stmt-> close();
-echo $_SESSION['ID'];
+
 
     ?>
 
@@ -149,10 +149,10 @@ echo $_SESSION['ID'];
                     <li class="nav-item mr-5 active">
                         <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
                     </li>
-
-                    <li class="nav-item mr-5">
-                        <a class="nav-link" href="shop.php">Shop</a>
+                    <li class="nav-item mr-5 active">
+                        <b><?php echo $_SESSION['ID'];?></b>
                     </li>
+
                     <li>
                         <a class="nav-link" href="logout.php">Logout</a>
 
@@ -303,7 +303,7 @@ echo $_SESSION['ID'];
                         <div class="row text-center p-1">
                             <div class="col-sm-3">
                                 <label for="price"><b>Price</b></label>
-                                <p>'.$price.'</p>
+                                <p>Kshs.'.$price.'</p>
                             </div>
                             <div class="col-sm-3">
                                 <label for="quantity"><b>Quantity</b></label>
@@ -360,7 +360,7 @@ echo $_SESSION['ID'];
                         <div class="row text-center p-3 col-12">
                             <div class="col-sm-3">
                                 <label for="price"><b>Price</b></label>
-                                <p>'.$price.'</p>
+                                <p>KShs.'.$price.'</p>
                             </div>
                             <div class="col-sm-3">
                                 <label for="quantity"><b>Quantity</b></label>
@@ -372,6 +372,8 @@ echo $_SESSION['ID'];
                             </div>
                         </div>
                         <hr>
+                       
+                        </div>
                         <div class="row p-2 mt-0 col-3">
                             <strong> Description  </strong>
                         </div>

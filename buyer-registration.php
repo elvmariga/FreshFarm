@@ -132,8 +132,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                                 <label class="form-label f5" for="buyer_password">Password</label>
                             </dt>
                             <dd>
-                                <input type="password" name="password_one" id="buyer_password" class="form-control form-control-lg input-block" placeholder="Create a password" required>
-                                <input type="password" name="password_two" id="buyer_password1" class="form-control form-control-lg input-block mt-5 mb-5" placeholder="Confirm password" required>
+                                <input type="password" name="password_one" data-minimum-character-count="8" data-passphrase-length="15"id="buyer_password" class="form-control form-control-lg input-block" placeholder="Create a password" required>
+                                <input type="password" name="password_two"data-minimum-character-count="8" data-passphrase-length="15" id="buyer_password1" class="form-control form-control-lg input-block mt-5 mb-5" placeholder="Confirm password" required>
                                 <p class="form-control-note">Make sure it's <span class="js-more-than-n-chars">more than 15 characters</span> OR <span class="js-min-chars">at least 8 characters</span> <span class="js-number-requirement">including a number</span> <span class="js-letter-requirement">and a lowercase letter</span>. <a href="password.html" class="tooltipped tooltipped-s" aria-label="Learn more about strong passwords">Learn more</a>.</p>
                             </dd>
                         </dl>
