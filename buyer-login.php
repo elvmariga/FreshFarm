@@ -57,7 +57,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             else {
                 if (password_verify($buyer_password, $pass_to_store)){
-                        $_SESSION['ID'] = $ID_no;
+                        $_SESSION['IDb'] = $ID_no;
                         echo "Login Successfull!";
                         header("Location: shop.php");
 

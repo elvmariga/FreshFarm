@@ -67,7 +67,9 @@ if($_SESSION["ID"]!=null){
             }
 // Check if file already exists
             if (file_exists($target_file)) {
-                echo "Sorry, file already exists.";
+                echo '<div class="alert alert-danger alert-dismissible fade show w-100">Sorry, file already exists.
+                       <button class="close" role="button" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span></button>
+                      </div>';
                 $uploadOk = 0;
             }
 // Check file size
@@ -147,8 +149,8 @@ if($conn->query($sql)===TRUE){
     $stmt->fetch();
     $stmt->close();
 
-    $stmt= $conn->prepare(" select book_id from bookprduct where owner_id=? ");
-    $stmt -> bind_param("i", $session['ID']);
+    $stmt= $conn->prepare(" select book_id from bookprduct where customer_id=? ");
+    $stmt -> bind_param("s", $session['ID']);
     $stmt->execute();
     $stmt->bind_result($book_id);
     $stmt->fetch();
@@ -197,6 +199,7 @@ if($conn->query($sql)===TRUE){
 
             <!--modal for  product  posting-->
         <button  role="button" class="btn btn-success mr-5" data-target="#exampleModal" data-toggle="modal">Post Product</button>
+        <a   role="button" class="btn btn-success ml-5" href="viewBooked.php" >View books</a>
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content p-5">
@@ -206,10 +209,11 @@ if($conn->query($sql)===TRUE){
                             <span aria-hidden="true">&times;</span>
                         </button>
 
+
                     </div>
                         <p> <b>Please enter the details of the product</b></p>
                         <form class="form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST" enctype="multipart/form-data" role="form">
-                            <img class="img-fluid" src="'.$image_url.'" height="200px">
+                            <img  src="img/kalimoni-fruit-basket" height="150px">
                             <hr>
                             <div class="custom-file mt-1">
                                 <input type="file" class="custom-file-input"  id="customFile" name="fileToUpload" required>
@@ -263,46 +267,59 @@ if($conn->query($sql)===TRUE){
                         </form>
 
                     </div>
+
                 </div>
         <div class="row mt-5 justify-content-center">
 
 <!--to display farmer's details on the the profile page-->
 
             <?php
-            if($_SESSION['ID']!=null){
-                $stmt = $conn->prepare(" select  ID_no, first_name, last_name, email,  phone_no, location from  farmer where user_id=?");
+                $stmt = $conn->prepare(" select  ID_no, first_name, last_name, email,  phone_no, location from  farmer where ID_no=?");
                 $stmt->bind_param("s",$_SESSION['ID']);
-                if ($stmt->execute())  {
+                if ($stmt->execute()) {
                     $stmt->bind_result($ID_no, $first_name, $last_name, $email, $phone_no, $location);
-                    $stmt->fetch();
+                    while ($stmt->fetch()) {
+                        echo '
+                        <div class="container">
+                             <div class="row text-center">
+                                 <div class="align-content-center">
+                    <div class=" justify-content-between col-12 offset-6">
+                    <h3 class="text-secondary">Your Profile '.$first_name.'</h3>
+                    <hr>
+                    <label for="price"><b>Farmer Name:</b></label>
+                        <h6>'.$first_name." ".''.$last_name.'</h6><hr>
+                    <label for="price"><b>Email:</b></label>
+                        <h6>'.$email.'</h6><hr>
+                    <label for="price"><b>Phone No. :</b></label>
+                        <h6>'.$phone_no.'</h6><hr>
+                        
+                    <label for="price"><b>Location:</b></label>
+                        <h6>'.$location.'</h6><hr>
+                       
+                    </div>
+                             </div>
+                        </div>
+                        ';
 
-//                        echo $_SESSION['ID'];
 
-                        echo $first_name;
 
-//
-//                        echo '
-/*                         <div class="mt-5 col-12" ><h1  class="text-info text-center"> <?php echo $first_name, " ", $last_name;?></h1></div>*/
-//
-/*                <p Name: <?php echo "$first_name"; ?></p>*/
-//                ';
+
+
 
                     }
-            }else{
-                echo $stmt->error;
-            }
+
+                }
             ?>
+            <button  role="button" class="btn btn-success mr-5" data-target="#exampleModal" data-toggle="modal">Edit Profile</button>
 
-                <div class="row justify-content-around">
-                    <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3">
-                        <div class="mt-5 col-12" ><h1  class="text-info text-center"><?php echo $first_name, " ", $last_name;?></h1></div>
-                    </div>
 
-                </div>
-
+        </div>
             </div>
     </div>
-    <div class="col-sm-6 p-5 pt-3 ">
+    <div class="col-sm-6 p-5 pt-3  shadow-lg">
+        <div class="align-content-center">
+            <h3><strong>POSTED PRODUCTS</strong></h3>
+        </div>
         <div>
             <form class="form-inline my-5 my-lg- ml-5 ">
             <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
@@ -384,74 +401,8 @@ if($conn->query($sql)===TRUE){
                                     <input class="d-none" type="text" name="product_id" value="' .$product_id2 .'" >
                                     <input type="submit" value="Remove" class="btn btn-danger ml-5">
                                     </form>
-                                   <hr>
-                                  <a   class="btn btn-success ml-5" href="viewBooked.php" >View books</a>
-//        <div class="modal fade text-center col-10" id="id'.$book_id.'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-//            <div class="modal-dialog modal-lg" role="document">
-//                <div class="modal-content text-center">
-//                    <div class="modal-header ">
-//                        <h5 class="modal-title" id="exampleModalLabel">Product Details</h5>
-//                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-//                            <span aria-hidden="true">&times;</span>
-//                        </button>
-//
-//                    </div>
-//                    <form style="color:black"  enctype="multipart/form-data" method="post">
-//                        <div class="modal-body">
-//                            <div class="w-70">
-//                                  <div class=" tex-center col-6 pr-3 pl-5">
-//                        <img src="'.$image_url.'" class="card-img-top" height="180">
-//
-//                    </div>
-//                    <hr>
-//                    <div class="col-12">
-//                        <div class="row justify-content-between pl-3 pr-1 pt-2 col-2">
-//                        <label for="price"><b>Product Name:</b></label>
-//                            <h5>'.$product_name.'</h5>
-//
-//                        </div>
-//                        <hr>
-//                        <div class="row text-center p-3 col-12">
-//                            <div class="col-sm-3">
-//                                <label for="price"><b>Price</b></label>
-//                                <p>'.$price.'</p>
-//                            </div>
-//                            <div class="col-sm-3">
-//                                <label for="quantity"><b>Quantity</b></label>
-//                                <p>'.$quantity.'</p>
-//                            </div>
-//                            <div class="col-sm-3">
-//                                <label for="status"><b>Status</b></label>
-//                                <p>'.$status.'</p>
-//                            </div>
-//                        </div>
-//                        <hr>
-//                        <div class="row p-2 mt-0 col-3">
-//                            <strong> Description  </strong>
-//                        </div>
-//                        <div class="row">
-//
-//                            '.$description.'
-//                              <hr>
-//
-//                        </div>
-//                                    <small class="small text-muted pl-1">Posted On: '.$date.'</small>
-//
-//
-//                            </div>
-//
-//
-//                        </div>
-//                        <div class="modal-footer">
-//                                    
-//                            <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-//
-//                        </div>
-//                    </form>
-//                </div>
-//            </div>
-//        </div>
-                                
+                                                               
+        
                                 </div>
                              
                             </div>
@@ -462,6 +413,7 @@ if($conn->query($sql)===TRUE){
                 </div>
 
 
+             </div>
              </div>
 
             ';

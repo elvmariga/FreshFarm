@@ -22,7 +22,7 @@
     </head>
     <?php
 
-    if($_SESSION['ID']!=null){
+    if($_SESSION['IDb']!=null){
         $servername = "localhost";
         $username = "root";
         $password = "";
@@ -39,7 +39,7 @@
         if($conn->query($sql)===TRUE){
 
             $stmt = $conn->prepare("select email from buyer Where ID_no=? ");
-            $stmt->bind_param("s",$_SESSION['ID']);
+            $stmt->bind_param("s",$_SESSION['IDb']);
             $stmt->bind_result($email);
             $stmt->fetch();
             $stmt->close();
@@ -48,7 +48,7 @@
                 $username= $_POST["username"];
                 $phone_no=$_POST['phone_no'];
                 $location=$_POST['location'];
-                echo $_SESSION['ID'];
+                echo $_SESSION['IDb'];
 
                 $img_url = "ddd";
                 $target_dir = "uploads/";
@@ -101,7 +101,7 @@
                         }else{
                             echo $stmt->error;
                         }
-                        echo $_SESSION['ID'];
+                        echo $_SESSION['IDb'];
                     } else {
                         echo "Sorry, there was an error uploading your file.";
                     }

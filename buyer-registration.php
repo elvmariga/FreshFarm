@@ -25,8 +25,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $user_id = md5($ID_no);
         $stmt->bind_param("sssss",  $first_name,$last_name, $email, $pass_to_store, $user_id);
         if($stmt->execute()){
-            $_SESSION['ID']=$user_id;
-            echo $_SESSION['ID'];
+            $_SESSION['IDb']=$user_id;
+
             header("Location: buyer-login.php");
         }else{
             echo $stmt->error;

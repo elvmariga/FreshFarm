@@ -1,7 +1,8 @@
+<!DOCTYpe>
 <?php
 session_start();
 ?>
-
+<html>
 <?php
 if($_SESSION["ID"]!=null) {
     $servername = "localhost";
@@ -18,13 +19,13 @@ if($_SESSION["ID"]!=null) {
     $sql = " use FreshFarm";
     if ($conn->query($sql) === TRUE) {
         $stmt = $conn->prepare("select * from buyer Where user_id=? ");
-        $stmt->bind_param("s", $_SESSION['ID']);
+        $stmt->bind_param("s", $_SESSION['IDb']);
         $stmt->execute();
         $stmt->bind_result($ID_no, $first_name, $last_name, $email, $buyer_password, $date, $user_id);
         $stmt->fetch();
         $stmt->close();
 
-        echo $_SESSION['ID'];
+        echo $_SESSION['IDb'];
         // if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //get from db
@@ -36,7 +37,7 @@ if($_SESSION["ID"]!=null) {
 // prepare and bind
         $stmt = $conn->prepare("insert into bookprduct (prod_id,quantity,veiw,owner_id) values (?,?,?,?)");
         $view='no';
-        $owner_id = $_SESSION['ID'];
+        $owner_id = $_SESSION['IDb'];
         $stmt->bind_param("ssss",$getProd,  $quantity,$view, $owner_id);
 
         if($stmt->execute()){

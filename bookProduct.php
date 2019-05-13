@@ -11,7 +11,7 @@ session_start();
     <meta name="Elvis Mariga" content="">
     <link rel="icon" href="img/icon.jpg">
 
-    <title>FreshFarm | Shop</title>
+    <title>FreshFarm | Book Product</title>
 
     <!-- Bootstrap core CSS -->
     <link href="dist/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -24,7 +24,7 @@ session_start();
     <link href="carousel.css" rel="stylesheet" type="text/css">
 </head>
 <?php
-if($_SESSION["ID"]!=null && $_SERVER["REQUEST_METHOD"]=="POST") {
+if($_SESSION['IDb']!=null && $_SERVER["REQUEST_METHOD"]=="POST") {
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -39,13 +39,13 @@ if($_SESSION["ID"]!=null && $_SERVER["REQUEST_METHOD"]=="POST") {
     $sql = " use FreshFarm";
     if ($conn->query($sql) === TRUE) {
         $stmt = $conn->prepare("select * from buyer Where user_id=? ");
-        $stmt->bind_param("s", $_SESSION['ID']);
+        $stmt->bind_param("s", $_SESSION['IDb']);
         $stmt->execute();
         $stmt->bind_result($ID_no, $first_name, $last_name, $email, $buyer_password, $date, $user_id);
         $stmt->fetch();
         $stmt->close();
 
-        echo $_SESSION['ID'];
+        echo $_SESSION['IDb'];
         // if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //get from db
@@ -55,9 +55,9 @@ if($_SESSION["ID"]!=null && $_SERVER["REQUEST_METHOD"]=="POST") {
         $getProd = $_POST['product_id'];
         $quantity = $_POST["quantity"];
 // prepare and bind
-        $stmt = $conn->prepare("insert into bookprduct (prod_id,quantity,veiw,owner_id) values (?,?,?,?)");
+        $stmt = $conn->prepare("insert into bookprduct (prod_id,quantity,veiw,customer_id) values (?,?,?,?)");
         $view='no';
-        $owner_id = $_SESSION['ID'];
+        $owner_id = $_SESSION['IDb'];
         $stmt->bind_param("ssss",$getProd,  $quantity,$view, $owner_id);
 
         if($stmt->execute()){
@@ -80,19 +80,54 @@ if($_SESSION["ID"]!=null && $_SERVER["REQUEST_METHOD"]=="POST") {
 
 
 <body>
-<form action="<?php // echo $_SERVER['PHP_SELF'] ?> " class="align-content-center" method="post" enctype="multipart/form-data">
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 
 
-   <div class="form-group offset-4 col-4">
-       <input type="text" class="d-none" name="product_id" value="<?php echo $_GET['product_id']?>">
-       <label for=" quantity">Quantity</label>
-       <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Enter quantity " required>
-   </div>
-    <button class="btn-mktg btn-primary-mktg btn-large-mktg f4 btn-block" type="submit" data-ga-click="Signup, Attempt, location:home hero">
-        Submit Quantity
+    <a class="navbar-brand" href="index.html"> <img class="rounded-circle" src="img/images%20(2).jpg" alt="fruits" width="20" height="20">FreshFarm</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
     </button>
-</form>
+    <div class="container pl-20px">
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item mr-5 active">
+                    <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
 
+                <li class="nav-item mr-5">
+                    <a class="nav-link" href="shop.php">Shop</a>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</nav>
+<div class="main-container">
+    <div class="row align-content-center">
+        <div class="col-2">
+
+        </div>
+        <div class="col-8">
+            <form action="<?php // echo $_SERVER['PHP_SELF'] ?> " class="align-content-center" method="post" enctype="multipart/form-data">
+
+
+                <div class="form-group offset-4 col-4">
+                    <input type="text" class="d-none" name="product_id" value="<?php echo $_GET['product_id']?>">
+                    <label for=" quantity"><strong><h4>Quantity</h4></strong></label>
+                    <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Enter quantity " required>
+                </div>
+                <button class="btn btn-success offset-5" type="submit">Submit Quantity</button>
+            </form>
+
+        </div>
+        <div class="col-2">
+
+        </div>
+    </div>
+</div>
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->

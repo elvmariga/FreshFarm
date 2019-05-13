@@ -22,7 +22,7 @@
         <link href="carousel.css" rel="stylesheet" type="text/css">
     </head>
     <?php
-    if($_SESSION["ID"]!=null){
+    if($_SESSION['IDb']!=null){
         $servername = "localhost";
         $username = "root";
         $password = "";
@@ -35,18 +35,18 @@
             die("Connection failed: " . $conn->connect_error);
         }
         $sql =" use FreshFarm";
-        if($conn->query($sql)===TRUE){
-            $stmt = $conn->prepare("select * from buyer Where user_id=? ");
-            $stmt->bind_param("s",$_SESSION['ID']);
-            $stmt->execute();
-            $stmt->bind_result($ID_no, $first_name,$last_name,$email, $buyer_password,$date, $user_id);
-            $stmt->fetch();
-            $stmt->close();
+        if($conn->query($sql)===TRUE && $_SERVER["REQUEST_METHOD"]=="GET" ){
+//            $stmt = $conn->prepare("select * from buyer Where user_id=? ");
+//            $stmt->bind_param("s",$_SESSION['IDb']);
+//            $stmt->execute();
+//            $stmt->bind_result($ID_no, $first_name,$last_name,$email, $buyer_password,$date, $user_id);
+//            $stmt->fetch();
+//            $stmt->close();
 
 
 
-        }elseif($email==null && $_SERVER["REQUEST_METHOD"]=="POST"){
-                $username= $_POST["username"];
+        }elseif($_SERVER["REQUEST_METHOD"]=="POST"){
+                $username= $_POST['username'];
                 $phone_no=$_POST['phone_no'];
                 $location=$_POST['location'];
 
@@ -56,6 +56,7 @@
                 $target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
                 $uploadOk = 1;
                 $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+            echo $_SESSION['IDb'];
 // Check if image file is a actual image or fake image
                 if(isset($_POST["submit"])) {
                     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
@@ -73,7 +74,7 @@
                     $uploadOk = 0;
                 }
 // Check file size
-                if ($_FILES["fileToUpload"]["size"] > 1000000) {
+                if ($_FILES["fileToUpload"]["size"] > 5800000000) {
                     echo "Sorry, your file is too large.";
                     $uploadOk = 0;
                 }
@@ -91,13 +92,15 @@
                 } else {
 
                     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+                       
                         $stmt = $conn->prepare("insert into buyer_profile (username, phone_no, location, image_url,profile_id,owner_id) values (?,?,?,?,?,?)");
-                        $owner_id= $user_id;
-                        $stmt->bind_param("sissii",$username,$phone_no, $location,$target_file,$_SESSION["ID"], $owner_id);
+                        $owner_id=$_SESSION['IDb'];
+                        $stmt->bind_param("sissii",$username,$phone_no, $location,$target_file,$_SESSION["IDb"], $owner_id);
                         echo $stmt->error;
                         if($stmt->execute()){
-                            header("Location:shop.php");
-
+                           
+//                            header("Location:shop.php");
+//
 
                         }else{
                             echo $stmt->error;
@@ -120,19 +123,7 @@
 
 
 
-    <?php
-    $stmt = $conn->prepare("select * from buyer_profile where profile_id=?");
-    $X=3;
-    $stmt->bind_param("s",  $X);
-    $stmt->execute();
 
-    $stmt->bind_result($username,$phone_no, $location, $target_file, $profile_id, $owner_id);
-    $stmt->fetch();
-
-    $stmt-> close();
-
-
-    ?>
 
     <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -149,9 +140,6 @@
                     <li class="nav-item mr-5 active">
                         <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item mr-5 active">
-                        <b><?php echo $_SESSION['ID'];?></b>
-                    </li>
 
                     <li>
                         <a class="nav-link" href="logout.php">Logout</a>
@@ -165,53 +153,74 @@
     </nav>
     <div class="container">
         <div class=" row text-center">
-            <div class="col-3  p-2 mr-2 ">
-                <div class="col-sm-11 col-md-10 col-lg-9 col-xl-8 justify-content-center">
-                    <div class="justify-content-center d-flex">
-                        <img src="<?php echo $target_file;?>" class="rounded rounded-circle img mt-5 shadow-lg" width="100" height="100">
+            <div class="col-3   ml-2">
+                <div class="align-content-center">
+
+                    <?php
+                    $sql = "SELECT * FROM buyer_profile INNER JOIN buyer WHERE buyer_profile.profile_id=? and buyer_profile.owner_id=buyer.ID_no";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("s",  $_SESSION['IDb']);
+                    if ($stmt->execute()) {
+                        $stmt->bind_result($username, $phone_no, $location, $target_file, $profile_id, $owner_id, $ID_no, $first_name,$last_name, $email, $buyer_password, $date, $user_id);
+                        while ($stmt->fetch()){
+                            echo '
+                             <div class="row text-center">
+                                 <div class="align-content-center">
+                    <div class=" justify-content-center">
+                     <p class="text-justify pt-4 offset-4"><strong> Your Profile '.$username.'</strong></p>
+                   <div class="justify-content-center d-flex">
+                      <img src=" '.$target_file.' " class="rounded rounded-circle img mt-5 shadow-lg" width="300" height="300">
+                    </div><hr>
+                    <label for="price"><b> Buyer Name:</b></label>
+                        <h6>'.$first_name." ".''.$last_name.'</h6><hr>
+                    <label for="price"><b>Email:</b></label>
+                        <h6>'.$email.'</h6><hr>
+                    <label for="price"><b>Phone No. :</b></label>
+                        <h6>'.$phone_no.'</h6><hr>
+                        
+                    <label for="price"><b>Location:</b></label>
+                        <h6>'.$location.'</h6><hr>
+                       
                     </div>
+                             </div>
+                        </div>
+                        
+                        ';
+                        }
 
+                        $stmt->close();
 
-                </div>
-                <div class="mt-5 col-12" ><h5  class="text-info text-center"><?php echo $first_name, $last_name;?></h5></div>
-
-                <hr>
-                <div class=" container text-center">
-
-                    <p><b>Email</b> <?php echo $email;?> </p>
-                        <hr>
-                    <p><b>Phone Number:</b> <?php echo $phone_no;?> </p>
-                    <hr>
-                    <p><b>Location</b> <?php echo $location;?> </p>
-
+                    }
+                    ?>
 
                 </div>
-                <div class="row justify-content-center col-4">
+
+                <div class="justify-content-center col-4">
 <!--                    modal edit profile-->
                     <button  role="button" class="btn btn-success mr-5" data-target="#exampleModal" data-toggle="modal">Edit Profile</button>
                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content p-5">
                                 <div class="modal-header all-color-successful" id="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Post Products to the MarketPlace</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
 
                                 </div>
-                                <p> <b>Please enter the details of the product</b></p>
+                                <p> <b>Please enter the necessary details</b></p>
                                 <form class="col-sm-12 col-md-10 col-lg-9 col-xl-8 align-self-center" action="<?php echo $_SERVER["PHP_SELF"];?> " method="post" enctype="multipart/form-data">
                                     <div class="row align-items-center">
-                                        <div class="custom-file mt-1  col-4 offset-4 ">
+                                        <div class="custom-file mt-1  offset-2">
                                             <input type="file" class="custom-file-input" id="customFile" name="fileToUpload" required>
-                                            <label class="custom-file-label" for="customFile">Choose a profile image to upload</label>
+                                            <label class="custom-file-label" for="customFile">Choose a profile image </label><hr>
                                         </div>
                                     </div>
                                     <div class="row justify-content-around">
-                                        <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3 pt-3">
+                                        <div class="offset-3">
 
 
-
+<hr>
                                             <div class="form-group">
                                                 <label for="input username"><b>Username</b></label>
                                                 <input type="text" class="form-control" id="Username" name="username" placeholder="Enter Username " required>
@@ -233,15 +242,16 @@
 
                                         </div>
 
+                                        <input type="submit" name="submit_profile" value="save" class="btn btn-succe
+                                    </div>
+                                    <div class="row mt-5 mb-5 justify-content-center">ss">
+
                                     </div>
 
                             </div>
 
 
-                            <div class="row mt-5 mb-5 justify-content-center">
-                                <input type="submit" name="submit_profile" value="save" class="btn btn-success">
 
-                            </div>
 
                             </form>
                         </div>
@@ -249,7 +259,7 @@
                 </div>
             </div>
 
-            <div class="col-7 p-2 pt-3 shadow-lg">
+            <div class="col-7 p-2 pt-3 offset-1 shadow-lg">
                 <div class="row justify-content-between m-5 p-2 ">
                     <div class="col-12">
                     <h5>Shop Organic Fruits, Melons,kalimoni Seasonal Baskets, Berries & Mangoes, Citrus Fruits, Azuri Dried Fruit,carrots, Butternut, Potatoes, Kale (Sukuma Wiki), Matoke, Potatoes, Tomatoes, Mushrooms, Peas, Onion, Managu, Spinanch</h5>
@@ -260,11 +270,12 @@
                 <div class="container m-2 p-2">
 
                     <?php
-                    if($_SESSION["ID"]!=null){
-                        $stmt = $conn->prepare("select* from product");
+                    if($_SESSION['IDb']!=null){
+                        $sql = "SELECT * FROM product INNER JOIN farmer ";
+                        $stmt = $conn->prepare($sql);
 
                         if($stmt->execute()){
-                            $stmt->bind_result($product_id,$product_name,$price,$quantity,$status, $description,$image_url,$date, $owner_id);
+                            $stmt->bind_result($product_id,$product_name,$price,$quantity,$status, $description,$image_url,$date, $owner_id,$ID_no, $first_name, $last_name, $email, $farmer_password, $phone_no, $location, $date, $user_id);
                             while ($stmt->fetch()){
 
                             $p= strpos($description,"<div>");
@@ -295,9 +306,11 @@
                     </div>
                     <div class="col-8">
                         <div class="row justify-content-between pr-3 pt-2">
+                        
                         <label for="price"><b>Product Name:</b></label>
+                        
                             <h6>'.$product_name.'</h6>
-                            <small class="small text-muted pl-1">'.$date.'</small>
+                            <small class="small text-muted pl-1"> '.$date.'</small>
                         </div>
                         <hr>
                         <div class="row text-center p-1">
@@ -351,11 +364,13 @@
                     </div>
                     <hr>
                     <div class="col-12">
-                        <div class="row justify-content-between pl-3 pr-1 pt-2 col-2">
+                        <div class="row justify-content-between pl-3 pr-1 pt-2 col-12">
+                      
                         <label for="price"><b>Product Name:</b></label>
-                            <h5>'.$product_name.'</h5>
-
+                            <h5>'.$product_name.'</h5><p><b>Posted by:</b> '.$first_name." ".' '.$last_name.'</p> <p><b>Phone_no:</b>'.$phone_no.'</p>
+                                  <small class="small text-muted pl-1">Date: '.$date.'</small>
                         </div>
+                       
                         <hr>
                         <div class="row text-center p-3 col-12">
                             <div class="col-sm-3">
@@ -374,7 +389,7 @@
                         <hr>
                        
                         </div>
-                        <div class="row p-2 mt-0 col-3">
+                        <div class="row p-2 mt-0 col-3 offset-2">
                             <strong> Description  </strong>
                         </div>
                         <div class="row">
@@ -392,18 +407,19 @@
                         </div>
                         <div class="modal-footer">
                                     
-                            <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
                         </div>
                     </form>
                 </div>
             </div>
-        </div>
-                            </div>
+      
+                            
 
 
-                        </div>
-
+                    </div>  
+</div>
+</div>
 
 
                     </div>
@@ -432,7 +448,7 @@
 
 
 
-
+</div>
 
                 </div>
             </div>
@@ -440,7 +456,6 @@
             </div>
         </div>
     </div>
-
 
 
 
